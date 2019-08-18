@@ -27,9 +27,15 @@ public class GameScreenController {
 	@FXML
 	public void initialize() {
 		scoreLabel.textProperty().bind(game.scoreProperty().asString());
-		timeLabel.textProperty().bind(game.timerProperty().asString());
+		
+		game.timerProperty().addListener((a, o, n) -> updateTime());
 		game.currentQuestionProperty().addListener((a, o, n) -> updateQuestion(n));
 		updateQuestion(game.currentQuestionProperty().get());
+		
+	}
+	
+	private void updateTime() {
+		timeLabel.setText( String.format("%.1f", (double)game.timerProperty().get()/1000.0 ));
 	}
 
 	private void updateQuestion(Question question) {

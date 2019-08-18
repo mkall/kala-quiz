@@ -6,7 +6,10 @@ import java.util.List;
 
 import javafx.application.Platform;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import net.ahven.ahvenpeli.config.Language;
+import net.ahven.ahvenpeli.config.Quiz;
 
 public class Util {
 	public static boolean hasByLocale(List<String> text, String locale) {
@@ -47,6 +50,18 @@ public class Util {
 			return new Image(fis);
 		} catch (IOException ex) {
 			throw new RuntimeException("Failed to load image from path: " + path, ex);
+		}
+	}
+	
+	public static void initBackground(Quiz quiz, StackPane root) {
+		if (quiz.getBackgroundImagePath() != null) {
+			Image background = Util.loadImageFromPath(quiz.getBackgroundImagePath());
+			ImageView backgroundView = new ImageView(background);
+			backgroundView.getStyleClass().add("ahven-root");
+			backgroundView.setPreserveRatio(true);
+			backgroundView.fitWidthProperty().bind(root.widthProperty());
+			backgroundView.fitHeightProperty().bind(root.heightProperty());
+			root.getChildren().add(backgroundView);
 		}
 	}
 

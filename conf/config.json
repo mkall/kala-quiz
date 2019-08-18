@@ -17,7 +17,7 @@
 	"revealAnswerTime": 3,
 	"scorePerCorrectAnswer": 100,
 	"scoreMaximumTimeBonus": 50,
-	"backgroundImagePath": "conf/images/background.jpg",
+	"backgroundImagePath": "conf/images/AallotLogo.jpg",
 	"questions": [
 		{
 			"text": [

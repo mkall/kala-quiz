@@ -52,6 +52,10 @@ public class Game {
 		resetAndStartTimer();
 	}
 
+	public Quiz getQuiz() {
+		return quiz;
+	}
+
 	public BiConsumer<String, Integer> getGameFinishedCallback() {
 		return gameFinishedCallback;
 	}
@@ -157,8 +161,9 @@ public class Game {
 		}
 		Collections.sort(indices, (a, b) -> a.weight - b.weight);
 
+		int count = Math.min(quiz.getQuestionsPerGame(), quiz.getQuestions().size());
 		List<Question> retVal = new ArrayList<>();
-		for (int i = 0; i < quiz.getQuestionsPerGame(); i++) {
+		for (int i = 0; i < count; i++) {
 			retVal.add(quiz.getQuestions().get(indices.get(i).index));
 		}
 		return retVal;
