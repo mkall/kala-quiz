@@ -1,0 +1,48 @@
+{
+	"title": "Kala Quiz",
+	"languages" : [
+		{"locale": "fi", "imagePath": "conf/images/suomiLippu.png"},
+		{"locale": "sv", "imagePath": "conf/images/sverigeFlagga.png"}
+	],
+	"welcomeText": [
+		"fi", "Syötä nimesi aloittaaksesi",
+		"sv", "Skriv ditt namn för att börja"
+	],
+	"startGameText": [
+		"fi", "Aloita peli",
+		"sv", "Börja spelet"
+	],
+	"questionsPerGame": 10,
+	"timePerQuestion": 10,
+	"revealAnswerTime": 3,
+	"scorePerCorrectAnswer": 100,
+	"scoreMaximumTimeBonus": 50,
+	"backgroundImagePath": "conf/images/background.jpg",
+	"questions": [
+		{
+			"text": [
+				"fi", "Minkä värinen oli Napoleonin valkoinen hevonen?",
+				"sv", "Vilken färg var Napoleons vita häst?"
+			],
+			"options": [
+				{"text": ["fi", "Keltainen", "sv", "Gul"]},
+				{"text": ["fi", "Oranssi", "sv", "Orange"]},
+				{"text": ["fi", "Sininen", "sv", "Blå"]},
+				{"text": ["fi", "Valkoinen", "sv", "Vit"], "correct": "true"}
+			]
+		},
+		{
+			"text": [
+				"fi", "Mikä kala tämä on?",
+				"sv", "Vad är detta för fisk?"
+			],
+			"imagePath": "conf/images/ahven.png",
+			"options": [
+				{"text": ["fi", "Kissa", "sv", "Katt"]},
+				{"text": ["fi", "Koira", "sv", "Hund"]},
+				{"text": ["fi", "Ahven", "sv", "Abborre"], "correct": "true"},
+				{"text": ["fi", "Omeletti", "sv", "Omelett"]}
+			]
+		}
+	]
+}

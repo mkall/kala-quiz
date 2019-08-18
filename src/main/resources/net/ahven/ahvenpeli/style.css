@@ -1,0 +1,28 @@
+@font-face {
+    font-family: Acme;
+    src: url('Acme-Regular.ttf');
+}
+
+.button {
+	-fx-font-family: Acme;
+	-fx-font-size: 18;
+	-fx-fill: black;
+	-fx-stroke: white;
+}
+
+.label {
+	-fx-font-family: Acme;
+	-fx-font-size: 18;
+	-fx-effect: dropshadow( three-pass-box, white, 5, 0.5, 0 ,0 );
+}
+
+.text-field {
+	-fx-font-family: Acme;
+	-fx-font-size: 18;
+	-fx-effect: dropshadow( three-pass-box, white, 5, 0.5, 0 ,0 );
+}
+
+.ahven-root {s
+    -fx-background-color: #FFFFFF;
+}
+

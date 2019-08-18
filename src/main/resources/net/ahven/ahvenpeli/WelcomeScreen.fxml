@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import java.net.*?>
+
+<BorderPane fx:controller="net.ahven.ahvenpeli.WelcomeScreenController" xmlns:fx="http://javafx.com/fxml">
+	<center>
+		<VBox alignment="CENTER" maxWidth="300" spacing="10">
+			<Label fx:id="welcomeLabel" />
+			<TextField fx:id="nameField"/>
+			<Button fx:id="startButton"/>
+		</VBox>
+	</center>
+	<bottom>
+		<FlowPane fx:id="langPane" />
+	</bottom>
+	
+	<stylesheets>
+    	<URL value="@style.css" />
+ 	</stylesheets>
+</BorderPane>

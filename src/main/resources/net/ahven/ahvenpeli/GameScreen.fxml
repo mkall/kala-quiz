@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import java.net.*?>
+
+<BorderPane fx:controller="net.ahven.ahvenpeli.GameScreenController" xmlns:fx="http://javafx.com/fxml">
+	<center>
+		<VBox fx:id="gameField" alignment="CENTER" maxWidth="300" spacing="10" >
+			<Label fx:id="questionLabel" />
+			<Label fx:id="scoreLabel"/>
+			<Label fx:id="timeLabel"/>
+		</VBox>
+	</center>
+	</center>
+	
+	<stylesheets>
+    	<URL value="@style.css" />
+ 	</stylesheets>
+</BorderPane>
