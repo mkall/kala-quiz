@@ -6,8 +6,16 @@
 .button {
 	-fx-font-family: Acme;
 	-fx-font-size: 18;
-	-fx-fill: black;
-	-fx-stroke: white;
+	-fx-font-weight: bold;
+	
+	-fx-background-color: 
+        #c3c4c4,
+        linear-gradient(#d6d6d6 50%, white 100%),
+        radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,1;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
 }
 
 .label {
@@ -23,6 +31,23 @@
 }
 
 .ahven-root {
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: WHITE;
 }
 
+.question-image {
+	 -fx-effect: dropshadow( three-pass-box, black, 10, 0, 0 ,0 );
+}
+
+.option-button:correct-guess {
+	-fx-background-color: 
+        #c3ffc4,
+        linear-gradient(#d6ffd6 50%, white 100%),
+        radial-gradient(center 50% -40%, radius 200%, #e6ffe6 45%, rgba(230,255,230,0) 50%);
+}
+
+.option-button:incorrect-guess {
+	-fx-background-color: 
+        #ffc4c4,
+        linear-gradient(#ffd6d6 50%, white 100%),
+        radial-gradient(center 50% -40%, radius 200%, #ffe6e6 45%, rgba(255,230,230,0) 50%);
+}

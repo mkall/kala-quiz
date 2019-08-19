@@ -57,7 +57,6 @@ public class Util {
 		if (quiz.getBackgroundImagePath() != null) {
 			Image background = Util.loadImageFromPath(quiz.getBackgroundImagePath());
 			ImageView backgroundView = new ImageView(background);
-			backgroundView.getStyleClass().add("ahven-root");
 			backgroundView.setPreserveRatio(true);
 			backgroundView.fitWidthProperty().bind(root.widthProperty());
 			backgroundView.fitHeightProperty().bind(root.heightProperty());

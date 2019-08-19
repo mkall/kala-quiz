@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import net.ahven.ahvenpeli.config.Quiz;
 
@@ -31,9 +33,14 @@ public class Main extends Application {
 		welcomeScreenPane = loader.load();
 		root.getChildren().add(welcomeScreenPane);
 		
-		Scene scene = new Scene(root, 800, 600);
+		Scene scene = new Scene(root, 800, 600, Color.WHITE);
+		scene.getStylesheets().add("/net/ahven/ahvenpeli/style.css");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setOnCloseRequest((t) -> {
+		        Platform.exit();
+		        System.exit(0);
+		    });
 	}
 
 	private void startGame(Game game) {
