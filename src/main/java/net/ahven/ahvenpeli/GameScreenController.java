@@ -1,20 +1,27 @@
 package net.ahven.ahvenpeli;
 
-import javafx.beans.value.ChangeListener;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+
+import javafx.application.Platform;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import net.ahven.ahvenpeli.config.Option;
 import net.ahven.ahvenpeli.config.Question;
 
 public class GameScreenController {
+	private static final ScheduledExecutorService EXECUTOR = Executors.newSingleThreadScheduledExecutor();
+	
 	private final Game game;
 
 	@FXML
@@ -48,8 +55,14 @@ public class GameScreenController {
 		timeLabel.setText( String.format("%.1f", (double)game.timerProperty().get()/1000.0 ));
 	}
 
-	private void updateQuestion(Question question) {
+	private void updateQuestion(QuestionModel questionModel) {
 		questionField.getChildren().clear();
+		
+		if( questionModel == null ) {
+			return;
+		}
+		
+		Question question = questionModel.getQuestion();
 		questionField.getChildren().add(new Label(question.getTextByLocale(game.getLocale())));
 		
 		if( question.getImagePath() != null ) {
@@ -67,30 +80,44 @@ public class GameScreenController {
 		int col = 0;
 		int row = 0;
 		
-		for( Option option : question.getOptions() ) {
+		for( OptionModel optionModel : questionModel.getOptions() ) {
+			Option option = optionModel.getOption();
 			Button button = new Button(option.getTextByLocale(game.getLocale()));
-			if( option.isCorrect() ) {
-				ChangeListener<Boolean> revealListener = (a, o, n) -> {
-					if( n.booleanValue() )  {
-						button.getStyleClass().add("option-button-revealed");					
+			optionModel.selectedProperty().addListener((a, o, n) -> {
+				if( n.booleanValue() ) {
+					if( option.isCorrect() ) {
+						button.pseudoClassStateChanged(PseudoClass.getPseudoClass("correct-guess"), true);
 					} else {
-						button.getStyleClass().remove("option-button-revealed");					
+						button.pseudoClassStateChanged(PseudoClass.getPseudoClass("incorrect-guess"), true);
 					}
-				};
-				game.revealAnswerProperty().addListener(revealListener);
-			}
+				} else {
+					button.pseudoClassStateChanged(PseudoClass.getPseudoClass("correct-guess"), false);
+					button.pseudoClassStateChanged(PseudoClass.getPseudoClass("incorrect-guess"), false);
+				}
+			});
+			AtomicBoolean blinkState = new AtomicBoolean();
+			AtomicReference<ScheduledFuture<?>> blinkFuture = new AtomicReference<>();
+			optionModel.blinkProperty().addListener((a, o, n) -> {
+				if( n.booleanValue() ) {
+					Runnable blinkTask = () -> Platform.runLater(() -> {
+						if( optionModel.blinkProperty().get() && button.isVisible() ) {
+							button.pseudoClassStateChanged(PseudoClass.getPseudoClass("blink-1"), blinkState.get());
+							button.pseudoClassStateChanged(PseudoClass.getPseudoClass("blink-2"), !blinkState.get());
+							blinkState.set(!blinkState.get());
+						} else {
+							blinkFuture.get().cancel(false);
+						}
+					});
+					blinkFuture.set(EXECUTOR.scheduleAtFixedRate(blinkTask, 0, 500, TimeUnit.MILLISECONDS));
+				} else {
+					blinkFuture.get().cancel(false);
+				}
+			});
+			
 			button.getStyleClass().add("option-button");
 			
 			button.prefWidthProperty().bind(gameField.widthProperty().multiply(0.4));
-			button.setOnAction((e) -> {
-				game.answer(option);
-				if( option.isCorrect() ) {
-					button.pseudoClassStateChanged(PseudoClass.getPseudoClass("correct-guess"), true);
-				} else {
-					button.pseudoClassStateChanged(PseudoClass.getPseudoClass("incorrect-guess"), true);
-				}
-				
-			});
+			button.setOnAction((e) -> game.answer(option));
 			optionsPane.add(button, col, row);
 			col++;
 			if( col == 2 )  {

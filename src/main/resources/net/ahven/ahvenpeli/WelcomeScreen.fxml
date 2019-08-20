@@ -6,7 +6,8 @@
 <BorderPane fx:controller="net.ahven.ahvenpeli.WelcomeScreenController" xmlns:fx="http://javafx.com/fxml">
 	<center>
 		<VBox alignment="CENTER" maxWidth="300" spacing="10">
-			<Label fx:id="welcomeLabel" />
+		    <GridPane fx:id="hiscorePane" hgap="10"/>
+		    <Label fx:id="welcomeLabel" />
 			<TextField fx:id="nameField"/>
 			<Button fx:id="startButton"/>
 		</VBox>

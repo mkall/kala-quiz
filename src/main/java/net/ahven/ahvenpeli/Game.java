@@ -10,9 +10,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyLongProperty;
@@ -29,25 +28,27 @@ public class Game {
 	private final Quiz quiz;
 	private final String locale;
 	private final String playerName;
+	private final Consumer<Game> gameCompletedOp;
+
 	private final List<Question> questions;
 
 	private final ReadOnlyLongWrapper timer = new ReadOnlyLongWrapper();
 	private final ReadOnlyIntegerWrapper score = new ReadOnlyIntegerWrapper();
-	private final ReadOnlyBooleanWrapper revealAnswer = new ReadOnlyBooleanWrapper();
-	private final ReadOnlyObjectWrapper<Question> currQuestion = new ReadOnlyObjectWrapper<>();
+	private final ReadOnlyObjectWrapper<QuestionModel> currQuestion = new ReadOnlyObjectWrapper<>();
 
 	private BiConsumer<String, Integer> gameFinishedCallback = null;
 
 	private int currQuestionIndex = 0;
 	private ScheduledFuture<?> timerFuture;
 
-	public Game(Quiz quiz, String locale, String playerName) {
+	public Game(Quiz quiz, String locale, String playerName, Consumer<Game> gameCompletedOp) {
 		this.quiz = quiz;
 		this.locale = locale;
 		this.playerName = playerName;
+		this.gameCompletedOp = gameCompletedOp;
 
 		questions = initRandomQuestions();
-		currQuestion.set(questions.get(0));
+		currQuestion.set(new QuestionModel(questions.get(0)));
 		score.set(0);
 		resetAndStartTimer();
 	}
@@ -68,7 +69,7 @@ public class Game {
 		this.gameFinishedCallback = gameFinishedCallback;
 	}
 
-	public ReadOnlyObjectProperty<Question> currentQuestionProperty() {
+	public ReadOnlyObjectProperty<QuestionModel> currentQuestionProperty() {
 		return currQuestion.getReadOnlyProperty();
 	}
 
@@ -78,10 +79,6 @@ public class Game {
 
 	public ReadOnlyLongProperty timerProperty() {
 		return timer.getReadOnlyProperty();
-	}
-
-	public ReadOnlyBooleanProperty revealAnswerProperty() {
-		return revealAnswer.getReadOnlyProperty();
 	}
 
 	public String getLocale() {
@@ -96,6 +93,11 @@ public class Game {
 	 * Call from JFX thread.
 	 */
 	public void answer(Option option) {
+		QuestionModel model = currentQuestionProperty().get();
+		if( model.isAnswered() ) {
+			return;
+		}
+		model.optionSelected(option);
 		if( option.isCorrect() ) {
 			int newScore = score.get() + quiz.getScorePerCorrectAnswer();
 			if( timer.get() > 0 ) {
@@ -118,10 +120,8 @@ public class Game {
 			timerFuture.cancel(false);
 			timerFuture = null;
 		}
-		revealAnswer.set(true);
 		EXECUTOR.schedule(() -> {
 			Util.runInJfxThread(() -> {
-				revealAnswer.set(false);
 				nextQuestion();
 			});
 		}, quiz.getRevealAnswerTime(), TimeUnit.SECONDS);
@@ -129,9 +129,11 @@ public class Game {
 
 	private void nextQuestion() {
 		currQuestionIndex++;
-		currQuestion.set(questions.size() > currQuestionIndex ? questions.get(currQuestionIndex) : null);
+		currQuestion.set(questions.size() > currQuestionIndex ? new QuestionModel(questions.get(currQuestionIndex)) : null);
 		if (currQuestion.get() != null) {
 			resetAndStartTimer();
+		} else {
+			gameCompletedOp.accept(this);
 		}
 	}
 

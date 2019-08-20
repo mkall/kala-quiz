@@ -15,6 +15,8 @@ public class Quiz {
 	private String title;
 	private List<String> welcomeText;
 	private List<String> startGameText;
+	private List<String> congratulationsText;
+	private List<String> finalScoreText;
 	private List<Language> languages;
 
 	private int questionsPerGame;
@@ -56,6 +58,30 @@ public class Quiz {
 	public void setStartGameText(List<String> startGameText) {
 		this.startGameText = startGameText;
 	}
+
+	public List<String> getCongratulationsText() {
+		return congratulationsText;
+	}
+
+	public String getCongratulationsTextByLocale(String locale) {
+		return Util.getByLocale(congratulationsText, locale);
+	}
+
+	public void setCongratulationsText(List<String> congratulationsText) {
+		this.congratulationsText = congratulationsText;
+	}
+//
+//	public List<String> getFinalScoreText() {
+//		return finalScoreText;
+//	}
+//
+//	public String getFinalScoreTextByLocale(String locale) {
+//		return Util.getByLocale(finalScoreText, locale);
+//	}
+//
+//	public void setFinalScoreText(List<String> finalScoreText) {
+//		this.finalScoreText = finalScoreText;
+//	}
 
 	public List<Language> getLanguages() {
 		return languages;

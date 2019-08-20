@@ -42,12 +42,20 @@
 	-fx-background-color: 
         #c3ffc4,
         linear-gradient(#d6ffd6 50%, white 100%),
-        radial-gradient(center 50% -40%, radius 200%, #e6ffe6 45%, rgba(230,255,230,0) 50%);
+        radial-gradient(center 50% -40%, radius 200%, #e6ffe6 45%, rgba(210,255,210,0) 50%);
 }
 
 .option-button:incorrect-guess {
 	-fx-background-color: 
         #ffc4c4,
-        linear-gradient(#ffd6d6 50%, white 100%),
-        radial-gradient(center 50% -40%, radius 200%, #ffe6e6 45%, rgba(255,230,230,0) 50%);
+        linear-gradient(#ffa6a6 50%, white 100%),
+        radial-gradient(center 50% -40%, radius 200%, #ffe6e6 45%, rgba(245,190,140,0) 50%);
+}
+
+.option-button:blink-1 {
+	-fx-effect: dropshadow( three-pass-box , rgba(0,128,0,0.6) , 10, 0.8 , 0 , 1 );
+}
+
+.option-button:blink-2 {
+	-fx-effect: dropshadow( three-pass-box , rgba(0,118,0,0.6) , 20, 0.8 , 0 , 1 );
 }

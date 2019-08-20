@@ -12,6 +12,10 @@
 		"fi", "Aloita peli",
 		"sv", "Börja spelet"
 	],
+	"congratulationsText": [
+		"fi", "Onneksi olkoon %s! Sait %s pistettä!",
+		"sv", "Grattis %s! Du fick %s poäng!"
+	],
 	"questionsPerGame": 10,
 	"timePerQuestion": 10,
 	"revealAnswerTime": 3,
