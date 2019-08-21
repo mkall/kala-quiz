@@ -1,0 +1,1 @@
+java -cp lib\*; net.ahven.ahvenpeli.Main

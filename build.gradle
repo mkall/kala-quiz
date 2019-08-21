@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'distribution'
 }
 
 repositories {
@@ -20,4 +21,21 @@ jar {
    manifest {
       attributes 'Main-Class': 'net.ahven.ahvenpeli.Main'
    }
+}
+
+distributions {
+    main {
+        contents {
+        	into('lib') {
+        	    from jar
+        	    from(project.configurations.runtime)
+        	}
+            into('conf') {
+                from 'conf-dist'
+            }
+            into('') {
+                from 'binaries'
+            }
+        }
+    }
 }

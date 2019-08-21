@@ -94,7 +94,7 @@ public class Game {
 	 */
 	public void answer(Option option) {
 		QuestionModel model = currentQuestionProperty().get();
-		if( model.isAnswered() ) {
+		if (!model.canAnswer()) {
 			return;
 		}
 		model.optionSelected(option);
@@ -102,7 +102,7 @@ public class Game {
 			int newScore = score.get() + quiz.getScorePerCorrectAnswer();
 			if( timer.get() > 0 ) {
 				// Small bonus for being fast
-				newScore += (int) Math.round((double) (timer.get() / (quiz.getTimePerQuestion() * 1000))
+				newScore += (int) Math.round(((double) timer.get() / (double) (quiz.getTimePerQuestion() * 1000))
 						* (double) quiz.getScoreMaximumTimeBonus());
 			}
 			score.set(newScore);
@@ -115,11 +115,16 @@ public class Game {
 		startTimer();
 	}
 
-	private void revealAnswerAndJumpToNextQuestion() {
+	private void stopTimer() {
 		if( timerFuture != null ) {
 			timerFuture.cancel(false);
 			timerFuture = null;
 		}
+	}
+
+	private void revealAnswerAndJumpToNextQuestion() {
+		stopTimer();
+		currQuestion.get().revealAnswer();
 		EXECUTOR.schedule(() -> {
 			Util.runInJfxThread(() -> {
 				nextQuestion();
@@ -133,6 +138,7 @@ public class Game {
 		if (currQuestion.get() != null) {
 			resetAndStartTimer();
 		} else {
+			stopTimer();
 			gameCompletedOp.accept(this);
 		}
 	}
@@ -145,6 +151,7 @@ public class Game {
 				if (timer.get() > 0) {
 					timer.set(Math.max(0, timer.get() - ((now - refTime.get()) / 1000000L)));
 					if (timer.get() == 0) {
+						currQuestion.get().setCanAnswer(false);
 						revealAnswerAndJumpToNextQuestion();
 					}
 				}

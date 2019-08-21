@@ -21,7 +21,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws IOException {
-		quiz = Quiz.fromFile(new File("conf/config.json"));
+		quiz = Quiz.fromFile(new File(Util.confDir + "/config.json"));
 		root = new StackPane();
 
 		primaryStage.setTitle("Ahven Peli");
@@ -93,6 +93,9 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
+		if (args.length > 0) {
+			Util.confDir = args[0];
+		}
 		launch(args);
 	}
 

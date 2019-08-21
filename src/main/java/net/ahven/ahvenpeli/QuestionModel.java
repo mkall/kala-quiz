@@ -12,7 +12,7 @@ public class QuestionModel {
 	private final Question question;
 	private final List<OptionModel> options;
 	
-	private boolean answered = false;
+	private boolean canAnswer = true;
 	
 	public QuestionModel(Question question) {
 		this.question = question;
@@ -31,14 +31,22 @@ public class QuestionModel {
 	}
 	
 	public void optionSelected(Option option) {
-		if( !answered ) {
-			answered = true;
+		if (canAnswer) {
+			canAnswer = false;
 			options.stream().filter((o) -> o.getOption().equals(option)).findFirst().get().setSelected(true);
-			options.stream().filter((o) -> o.getOption().isCorrect()).findFirst().get().setBlink(true);
+			revealAnswer();
 		}
 	}
 
-	public boolean isAnswered() {
-		return answered;
+	public boolean canAnswer() {
+		return canAnswer;
+	}
+
+	public void setCanAnswer(boolean canAnswer) {
+		this.canAnswer = canAnswer;
+	}
+
+	public void revealAnswer() {
+		options.stream().filter((o) -> o.getOption().isCorrect()).findFirst().get().setBlink(true);
 	}
 }

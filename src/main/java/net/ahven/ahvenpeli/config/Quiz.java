@@ -194,7 +194,7 @@ public class Quiz {
 			if (quiz.getQuestions() == null || quiz.getQuestions().isEmpty()) {
 				throw new RuntimeException("No questions defined");
 			}
-			if (quiz.getBackgroundImagePath() != null && !new File(quiz.getBackgroundImagePath()).isFile()) {
+			if (quiz.getBackgroundImagePath() != null && !Util.hasFileInPath(quiz.getBackgroundImagePath())) {
 				throw new RuntimeException("Quiz background image not found: " + quiz.getBackgroundImagePath());
 			}
 			for (Question q : quiz.getQuestions()) {
@@ -204,7 +204,7 @@ public class Quiz {
 				if (q.getText() != null) {
 					Util.hasLocalizationFor(q.getText(), quiz.getLanguages());
 				}
-				if (q.getImagePath() != null && !new File(q.getImagePath()).isFile()) {
+				if (q.getImagePath() != null && !Util.hasFileInPath(q.getImagePath())) {
 					throw new RuntimeException("Question refers to an image that does not exist: " + q.getImagePath());
 				}
 				if (q.getOptions() == null || q.getOptions().isEmpty()) {
@@ -217,7 +217,7 @@ public class Quiz {
 					if (o.getText() != null) {
 						Util.hasLocalizationFor(o.getText(), quiz.getLanguages());
 					}
-					if (o.getImagePath() != null && !new File(o.getImagePath()).isFile()) {
+					if (o.getImagePath() != null && !Util.hasFileInPath(o.getImagePath())) {
 						throw new RuntimeException(
 								"Question option refers to an image that does not exist: " + q.getImagePath());
 					}
