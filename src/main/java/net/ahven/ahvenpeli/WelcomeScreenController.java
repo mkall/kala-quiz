@@ -4,15 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import net.ahven.ahvenpeli.config.Language;
 import net.ahven.ahvenpeli.config.Quiz;
 
@@ -38,6 +45,9 @@ public class WelcomeScreenController {
 	@FXML
 	private FlowPane langPane;
 
+	@FXML
+	private Pane keyboardPane;
+
 	private String currLocale;
 
 	public WelcomeScreenController(Quiz quiz, Consumer<Game> startGameOp, Consumer<Game> gameCompletedOp) {
@@ -60,13 +70,22 @@ public class WelcomeScreenController {
 		if (hiscoreEntries.size() > 5) {
 			hiscoreEntries.remove(5);
 		}
-
 		hiscorePane.getChildren().clear();
+		int row = 0;
 		for (int i = 0; i < hiscoreEntries.size(); i++) {
+			Label positionLabel = new Label(Integer.toString((i + 1)) + ".");
+			positionLabel.setPrefWidth(20);
+			hiscorePane.add(positionLabel, 0, row);
 			Label nameLabel = new Label(hiscoreEntries.get(i).getName());
-			hiscorePane.add(nameLabel, 0, i);
+			nameLabel.setAlignment(Pos.CENTER_LEFT);
+			nameLabel.setPrefWidth(260.0);
+			hiscorePane.add(nameLabel, 1, row);
 			Label scoreLabel = new Label(Integer.toString(hiscoreEntries.get(i).getScore()));
-			hiscorePane.add(scoreLabel, 1, i);
+			scoreLabel.setPrefWidth(80);
+			scoreLabel.setAlignment(Pos.CENTER_RIGHT);
+
+			hiscorePane.add(scoreLabel, 2, row++);
+			hiscorePane.add(new Separator(Orientation.HORIZONTAL), 0, row++, 3, 1);
 		}
 	}
 
@@ -76,6 +95,17 @@ public class WelcomeScreenController {
 
 	@FXML
 	public void initialize() {
+		startButton.disableProperty().bind(nameField.textProperty().isEmpty());
+		nameField.setPrefWidth(200.0);
+		nameField.textProperty().addListener((a, o, n) -> {
+			if (n.length() > 20) {
+				nameField.setText(o);
+			}
+		});
+		ObjectProperty<Node> kbNode = new SimpleObjectProperty<>(nameField);
+		VirtualKeyboard keyboard = new VirtualKeyboard(kbNode);
+		keyboardPane.getChildren().add(keyboard.view());
+
 		assignLocale();
 
 		for (Language lang : quiz.getLanguages()) {

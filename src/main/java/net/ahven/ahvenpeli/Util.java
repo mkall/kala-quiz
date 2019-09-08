@@ -1,9 +1,13 @@
 package net.ahven.ahvenpeli;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 import javafx.application.Platform;
 import javafx.scene.image.Image;
@@ -60,6 +64,17 @@ public class Util {
 		}
 	}
 	
+	public static Clip loadAudioClip(String path) {
+		try (FileInputStream fis = new FileInputStream(confDir + File.separatorChar + path);
+				BufferedInputStream bis = new BufferedInputStream(fis)) {
+			Clip clip = AudioSystem.getClip();
+			clip.open(AudioSystem.getAudioInputStream(bis));
+			return clip;
+		} catch (Exception ex) {
+			throw new RuntimeException("Failed to load audio clip from path: " + path, ex);
+		}
+	}
+
 	public static void initBackground(Quiz quiz, StackPane root) {
 		if (quiz.getBackgroundImagePath() != null) {
 			Image background = Util.loadImageFromPath(quiz.getBackgroundImagePath());

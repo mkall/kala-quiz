@@ -25,6 +25,9 @@ public class Quiz {
 	private int scorePerCorrectAnswer;
 	private int scoreMaximumTimeBonus;
 	private String backgroundImagePath;
+	private String correctAnswerSoundPath;
+	private String incorrectAnswerSoundPath;
+
 	private List<Question> questions;
 
 	public String getTitle() {
@@ -70,18 +73,6 @@ public class Quiz {
 	public void setCongratulationsText(List<String> congratulationsText) {
 		this.congratulationsText = congratulationsText;
 	}
-//
-//	public List<String> getFinalScoreText() {
-//		return finalScoreText;
-//	}
-//
-//	public String getFinalScoreTextByLocale(String locale) {
-//		return Util.getByLocale(finalScoreText, locale);
-//	}
-//
-//	public void setFinalScoreText(List<String> finalScoreText) {
-//		this.finalScoreText = finalScoreText;
-//	}
 
 	public List<Language> getLanguages() {
 		return languages;
@@ -155,6 +146,22 @@ public class Quiz {
 		this.backgroundImagePath = backgroundImagePath;
 	}
 
+	public String getCorrectAnswerSoundPath() {
+		return correctAnswerSoundPath;
+	}
+
+	public void setCorrectAnswerSoundPath(String correctAnswerSoundPath) {
+		this.correctAnswerSoundPath = correctAnswerSoundPath;
+	}
+
+	public String getIncorrectAnswerSoundPath() {
+		return incorrectAnswerSoundPath;
+	}
+
+	public void setIncorrectAnswerSoundPath(String incorrectAnswerSoundPath) {
+		this.incorrectAnswerSoundPath = incorrectAnswerSoundPath;
+	}
+
 	public void setQuestions(List<Question> questions) {
 		this.questions = questions;
 	}
@@ -197,6 +204,15 @@ public class Quiz {
 			if (quiz.getBackgroundImagePath() != null && !Util.hasFileInPath(quiz.getBackgroundImagePath())) {
 				throw new RuntimeException("Quiz background image not found: " + quiz.getBackgroundImagePath());
 			}
+			if (quiz.getCorrectAnswerSoundPath() != null && !Util.hasFileInPath(quiz.getCorrectAnswerSoundPath())) {
+				throw new RuntimeException("Correct answer sound refers to a path that does not exist: "
+						+ quiz.getCorrectAnswerSoundPath());
+			}
+			if (quiz.getIncorrectAnswerSoundPath() != null && !Util.hasFileInPath(quiz.getIncorrectAnswerSoundPath())) {
+				throw new RuntimeException("Incorrect answer sound refers to a path that does not exist: "
+						+ quiz.getIncorrectAnswerSoundPath());
+			}
+
 			for (Question q : quiz.getQuestions()) {
 				if (q.getText() == null && q.getImagePath() == null) {
 					throw new RuntimeException("Question has neither text nor image");

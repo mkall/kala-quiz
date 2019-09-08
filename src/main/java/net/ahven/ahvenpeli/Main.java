@@ -2,6 +2,9 @@ package net.ahven.ahvenpeli;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
+
+import javax.sound.sampled.Clip;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -11,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import net.ahven.ahvenpeli.config.Quiz;
 
 public class Main extends Application {
@@ -19,12 +23,17 @@ public class Main extends Application {
 	private Pane welcomeScreenPane;
 	private WelcomeScreenController welcomeScreenController;
 
+	private Optional<Clip> correctClip = Optional.empty();
+	private Optional<Clip> incorrectClip = Optional.empty();
+
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		quiz = Quiz.fromFile(new File(Util.confDir + "/config.json"));
 		root = new StackPane();
 
 		primaryStage.setTitle("Ahven Peli");
+		primaryStage.initStyle(StageStyle.UNDECORATED);
+		primaryStage.setFullScreen(true);
 
 		root.getStyleClass().add("ahven-root");
 		Util.initBackground(quiz, root);
@@ -44,6 +53,13 @@ public class Main extends Application {
 		        System.exit(0);
 		    });
 
+		if (quiz.getCorrectAnswerSoundPath() != null) {
+			correctClip = Optional.of(Util.loadAudioClip(quiz.getCorrectAnswerSoundPath()));
+		}
+		if (quiz.getIncorrectAnswerSoundPath() != null) {
+			incorrectClip = Optional.of(Util.loadAudioClip(quiz.getIncorrectAnswerSoundPath()));
+		}
+
 		loadWelcomeScreen();
 	}
 
@@ -56,6 +72,9 @@ public class Main extends Application {
 	}
 
 	private void startGame(Game game) {
+		game.setCorrectClip(correctClip);
+		game.setIncorrectClip(incorrectClip);
+
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("GameScreen.fxml"));
 		loader.setControllerFactory((c) -> new GameScreenController(game));
 		Pane pane;

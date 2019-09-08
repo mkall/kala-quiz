@@ -1,8 +1,8 @@
 {
 	"title": "Kala Quiz",
 	"languages" : [
-		{"locale": "fi", "imagePath": "conf/images/suomiLippu.png"},
-		{"locale": "sv", "imagePath": "conf/images/sverigeFlagga.png"}
+		{"locale": "fi", "imagePath": "images/suomiLippu.png"},
+		{"locale": "sv", "imagePath": "images/sverigeFlagga.png"}
 	],
 	"welcomeText": [
 		"fi", "Syötä nimesi aloittaaksesi",
@@ -21,7 +21,9 @@
 	"revealAnswerTime": 3,
 	"scorePerCorrectAnswer": 100,
 	"scoreMaximumTimeBonus": 50,
-	"backgroundImagePath": "conf/images/AallotLogo.jpg",
+	"backgroundImagePath": "images/AallotLogo.jpg",
+	"correctAnswerSoundPath": "sounds/correct.wav",
+	"incorrectAnswerSoundPath": "sounds/incorrect.wav",
 	"questions": [
 		{
 			"text": [
@@ -40,7 +42,7 @@
 				"fi", "Mikä kala tämä on?",
 				"sv", "Vad är detta för fisk?"
 			],
-			"imagePath": "conf/images/ahven.png",
+			"imagePath": "images/ahven.png",
 			"options": [
 				{"text": ["fi", "Kissa", "sv", "Katt"]},
 				{"text": ["fi", "Koira", "sv", "Hund"]},

@@ -3,6 +3,7 @@ package net.ahven.ahvenpeli;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -11,6 +12,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+
+import javax.sound.sampled.Clip;
 
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
@@ -40,6 +43,8 @@ public class Game {
 
 	private int currQuestionIndex = 0;
 	private ScheduledFuture<?> timerFuture;
+	private Optional<Clip> correctClip = Optional.empty();
+	private Optional<Clip> incorrectClip = Optional.empty();
 
 	public Game(Quiz quiz, String locale, String playerName, Consumer<Game> gameCompletedOp) {
 		this.quiz = quiz;
@@ -51,6 +56,14 @@ public class Game {
 		currQuestion.set(new QuestionModel(questions.get(0)));
 		score.set(0);
 		resetAndStartTimer();
+	}
+
+	public void setCorrectClip(Optional<Clip> correctClip) {
+		this.correctClip = correctClip;
+	}
+
+	public void setIncorrectClip(Optional<Clip> incorrectClip) {
+		this.incorrectClip = incorrectClip;
 	}
 
 	public Quiz getQuiz() {
@@ -99,6 +112,10 @@ public class Game {
 		}
 		model.optionSelected(option);
 		if( option.isCorrect() ) {
+			correctClip.ifPresent(c -> {
+				c.setFramePosition(0);
+				c.start();
+			});
 			int newScore = score.get() + quiz.getScorePerCorrectAnswer();
 			if( timer.get() > 0 ) {
 				// Small bonus for being fast
@@ -106,6 +123,11 @@ public class Game {
 						* (double) quiz.getScoreMaximumTimeBonus());
 			}
 			score.set(newScore);
+		} else {
+			incorrectClip.ifPresent(c -> {
+				c.setFramePosition(0);
+				c.start();
+			});
 		}
 		revealAnswerAndJumpToNextQuestion();
 	}

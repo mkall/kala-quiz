@@ -10,7 +10,9 @@
 		<VBox fx:id="gameField" alignment="CENTER" spacing="10" >
 			<VBox fx:id="questionField" alignment="CENTER" spacing="10" />
 			<Label fx:id="scoreLabel"/>
-			<Label fx:id="timeLabel"/>
+			<StackPane fx:id="timerPane">
+				<Label fx:id="timeLabel"/>
+			</StackPane>
 		</VBox>
 	</center>
 	
