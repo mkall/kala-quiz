@@ -11,7 +11,6 @@ public class CompletedScreenController {
 	@FXML
 	private Label congratulationsLabel;
 
-
 	public CompletedScreenController(Quiz quiz, Game game) {
 		this.quiz = quiz;
 		this.game = game;
@@ -19,8 +18,8 @@ public class CompletedScreenController {
 
 	@FXML
 	public void initialize() {
-		congratulationsLabel.setText(String.format(quiz.getCongratulationsTextByLocale(game.getLocale()),
-				game.getPlayerName(),
-				game.scoreProperty().get()));
+		congratulationsLabel.setText(quiz.getCongratulationsTextByLocale(game.getLocale())
+				.replace("${name}", game.getPlayerName())
+				.replace("${score}", Integer.toString(game.scoreProperty().get())));
 	}
 }

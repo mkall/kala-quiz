@@ -39,7 +39,7 @@ public class Main extends Application {
 		Util.initBackground(quiz, root);
 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("WelcomeScreen.fxml"));
-		loader.setControllerFactory((c) -> new WelcomeScreenController(quiz, this::startGame, this::gameCompleted));
+		loader.setControllerFactory((c) -> new WelcomeScreenController(quiz, this::loadStartScreen));
 		welcomeScreenPane = loader.load();
 		welcomeScreenController = loader.getController();
 		loadWelcomeScreen();
@@ -69,6 +69,26 @@ public class Main extends Application {
 		}
 		welcomeScreenController.reset();
 		root.getChildren().add(welcomeScreenPane);
+	}
+
+	private void loadStartScreen(String locale) {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("StartScreen.fxml"));
+		loader.setControllerFactory(
+				(c) -> new StartScreenController(quiz, locale, this::abortGame, this::startGame, this::gameCompleted));
+		Pane pane;
+		try {
+			pane = loader.load();
+			root.getChildren().remove(1);
+			root.getChildren().add(pane);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
+
+	private void abortGame(Game game) {
+		loadWelcomeScreen();
+
 	}
 
 	private void startGame(Game game) {

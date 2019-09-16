@@ -4,29 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import net.ahven.ahvenpeli.config.Language;
 import net.ahven.ahvenpeli.config.Quiz;
 
 public class WelcomeScreenController {
 	private final Quiz quiz;
-	private final Consumer<Game> startGameOp;
-	private final Consumer<Game> gameCompletedOp;
+	private final Consumer<String> startGameOp;
 
 	private final List<HiscoreEntry> hiscoreEntries = new ArrayList<>();
 
@@ -34,28 +28,14 @@ public class WelcomeScreenController {
 	private GridPane hiscorePane;
 
 	@FXML
-	private Label welcomeLabel;
-
-	@FXML
-	private TextField nameField;
-
-	@FXML
-	private Button startButton;
+	private VBox welcomeLabelsBox;
 
 	@FXML
 	private FlowPane langPane;
 
-	@FXML
-	private Pane keyboardPane;
-
-	private String currLocale;
-
-	public WelcomeScreenController(Quiz quiz, Consumer<Game> startGameOp, Consumer<Game> gameCompletedOp) {
+	public WelcomeScreenController(Quiz quiz, Consumer<String> startGameOp) {
 		this.quiz = quiz;
 		this.startGameOp = startGameOp;
-		this.gameCompletedOp = gameCompletedOp;
-
-		currLocale = quiz.getLanguages().get(0).getLocale();
 	}
 
 	public void addHiscoreEntry(HiscoreEntry hiscoreEntry) {
@@ -90,44 +70,22 @@ public class WelcomeScreenController {
 	}
 
 	public void reset() {
-		nameField.setText("");
+
 	}
 
 	@FXML
 	public void initialize() {
-		startButton.disableProperty().bind(nameField.textProperty().isEmpty());
-		nameField.setPrefWidth(200.0);
-		nameField.textProperty().addListener((a, o, n) -> {
-			if (n.length() > 20) {
-				nameField.setText(o);
-			}
-		});
-		ObjectProperty<Node> kbNode = new SimpleObjectProperty<>(nameField);
-		VirtualKeyboard keyboard = new VirtualKeyboard(kbNode);
-		keyboardPane.getChildren().add(keyboard.view());
-
-		assignLocale();
-
 		for (Language lang : quiz.getLanguages()) {
+			Label langLabel = new Label(quiz.getWelcomeTextByLocale(lang.getLocale()));
+			welcomeLabelsBox.getChildren().add(langLabel);
+
 			Button langButton = new Button();
 			Image langImg = Util.loadImageFromPath(lang.getImagePath());
 			langButton.setGraphic(new ImageView(langImg));
 			langButton.setOnAction((e) -> {
-				currLocale = lang.getLocale();
-				assignLocale();
+				startGameOp.accept(lang.getLocale());
 			});
 			langPane.getChildren().add(langButton);
 		}
-
-		startButton.addEventHandler(ActionEvent.ACTION, (e) -> startGame());
-	}
-
-	private void startGame() {
-		startGameOp.accept(new Game(quiz, currLocale, nameField.getText(), gameCompletedOp));
-	}
-
-	private void assignLocale() {
-		welcomeLabel.setText(quiz.getWelcomeTextByLocale(currLocale));
-		startButton.setText(quiz.getStartGameByLocale(currLocale));
 	}
 }

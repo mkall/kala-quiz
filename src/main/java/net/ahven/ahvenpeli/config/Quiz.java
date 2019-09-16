@@ -14,6 +14,8 @@ import net.ahven.ahvenpeli.Util;
 public class Quiz {
 	private String title;
 	private List<String> welcomeText;
+	private List<String> instructionText;
+	private List<String> enterNameText;
 	private List<String> startGameText;
 	private List<String> congratulationsText;
 	private List<String> finalScoreText;
@@ -25,6 +27,7 @@ public class Quiz {
 	private int scorePerCorrectAnswer;
 	private int scoreMaximumTimeBonus;
 	private String backgroundImagePath;
+	private String stopImagePath;
 	private String correctAnswerSoundPath;
 	private String incorrectAnswerSoundPath;
 
@@ -48,6 +51,30 @@ public class Quiz {
 
 	public void setWelcomeText(List<String> welcomeText) {
 		this.welcomeText = welcomeText;
+	}
+
+	public List<String> getInstructionText() {
+		return instructionText;
+	}
+
+	public String getInstructionTextByLocale(String locale) {
+		return Util.getByLocale(instructionText, locale);
+	}
+
+	public void setInstructionText(List<String> instructionText) {
+		this.instructionText = instructionText;
+	}
+
+	public List<String> getEnterNameText() {
+		return enterNameText;
+	}
+
+	public String getEnterNameTextByLocale(String locale) {
+		return Util.getByLocale(enterNameText, locale);
+	}
+
+	public void setEnterNameText(List<String> enterNameText) {
+		this.enterNameText = enterNameText;
 	}
 
 	public List<String> getStartGameText() {
@@ -146,6 +173,14 @@ public class Quiz {
 		this.backgroundImagePath = backgroundImagePath;
 	}
 
+	public String getStopImagePath() {
+		return stopImagePath;
+	}
+
+	public void setStopImagePath(String stopImagePath) {
+		this.stopImagePath = stopImagePath;
+	}
+
 	public String getCorrectAnswerSoundPath() {
 		return correctAnswerSoundPath;
 	}
@@ -193,6 +228,14 @@ public class Quiz {
 				throw new RuntimeException("No welcome text defined");
 			}
 			Util.hasLocalizationFor(quiz.getWelcomeText(), quiz.getLanguages());
+			if (quiz.getInstructionText() == null) {
+				throw new RuntimeException("No instruction text defined");
+			}
+			Util.hasLocalizationFor(quiz.getEnterNameText(), quiz.getLanguages());
+			if (quiz.getEnterNameText() == null) {
+				throw new RuntimeException("No enter name text defined");
+			}
+			Util.hasLocalizationFor(quiz.getInstructionText(), quiz.getLanguages());
 			if (quiz.getStartGameText() == null) {
 				throw new RuntimeException("No start game text defined");
 			}
@@ -203,6 +246,9 @@ public class Quiz {
 			}
 			if (quiz.getBackgroundImagePath() != null && !Util.hasFileInPath(quiz.getBackgroundImagePath())) {
 				throw new RuntimeException("Quiz background image not found: " + quiz.getBackgroundImagePath());
+			}
+			if (quiz.getStopImagePath() != null && !Util.hasFileInPath(quiz.getStopImagePath())) {
+				throw new RuntimeException("Quiz stop image not found: " + quiz.getStopImagePath());
 			}
 			if (quiz.getCorrectAnswerSoundPath() != null && !Util.hasFileInPath(quiz.getCorrectAnswerSoundPath())) {
 				throw new RuntimeException("Correct answer sound refers to a path that does not exist: "

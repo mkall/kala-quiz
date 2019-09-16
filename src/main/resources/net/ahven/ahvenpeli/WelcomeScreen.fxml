@@ -6,23 +6,17 @@
 
 <BorderPane fx:controller="net.ahven.ahvenpeli.WelcomeScreenController" xmlns:fx="http://javafx.com/fxml">
 	<center>
-		<VBox alignment="CENTER" maxWidth="640" spacing="10">
+		<VBox alignment="CENTER" maxWidth="1024" spacing="20">
 		    <Label text="Top 5" />
 		    <GridPane fx:id="hiscorePane" alignment="CENTER" hgap="10">
 		    	<padding>
          			<Insets bottom="30.0"/>
      			</padding>
      		</GridPane>
-		    <Label fx:id="welcomeLabel" />
-			<TextField fx:id="nameField"/>
-			<Pane fx:id="keyboardPane"/>
-			<Button fx:id="startButton"/>
+     		<VBox fx:id="welcomeLabelsBox" alignment="CENTER" maxWidth="1024" spacing="20" />
+     		<FlowPane alignment="CENTER" fx:id="langPane" hgap="10"/>
 		</VBox>
 	</center>
-	<bottom>
-		<FlowPane fx:id="langPane" />
-	</bottom>
-	
 	<stylesheets>
     	<URL value="@style.css" />
  	</stylesheets>

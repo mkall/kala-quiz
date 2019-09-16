@@ -5,16 +5,24 @@
 		{"locale": "sv", "imagePath": "images/sverigeFlagga.png"}
 	],
 	"welcomeText": [
-		"fi", "Syötä nimesi aloittaaksesi",
-		"sv", "Skriv ditt namn för att börja"
+		"fi", "Tervetuloa Ahvenpeliin, valitse kieli aloittaaksesi!",
+		"sv", "Välkommen till Ahvenspelet, välj språk för att börja!"
+	],
+	"instructionText": [
+		"fi", "Sinulta kysytään ${questions} kala-aiheista kysymystä. Vastausaikaa on ${time} sekuntia. Jokaisesta oikein vastatusta kysymyksestä saa ${score} pistettä. Vastaamalla kysymykseen nopeammin voit saada jopa ${bonus} lisäpistettä.",
+		"sv", "Du blir frågad ${questions} frågor om fiske. Du har ${time} sekunder tid per fråga. För varje rätt svar får du ${score} poäng. Om du svarar snabbt på en fråga kan du få upp till ${bonus} extrapoäng."
+	],
+	"enterNameText": [
+		"fi", "Syötä nimesi",
+		"sv", "Mata in ditt namn"
 	],
 	"startGameText": [
 		"fi", "Aloita peli",
 		"sv", "Börja spelet"
 	],
 	"congratulationsText": [
-		"fi", "Onneksi olkoon %s! Sait %s pistettä!",
-		"sv", "Grattis %s! Du fick %s poäng!"
+		"fi", "Onneksi olkoon ${name}! Sait ${score} pistettä!",
+		"sv", "Grattis ${name}! Du fick ${score} poäng!"
 	],
 	"questionsPerGame": 10,
 	"timePerQuestion": 10,
@@ -22,6 +30,7 @@
 	"scorePerCorrectAnswer": 100,
 	"scoreMaximumTimeBonus": 50,
 	"backgroundImagePath": "images/AallotLogo.jpg",
+	"stopImagePath": "images/stop.png",
 	"correctAnswerSoundPath": "sounds/correct.wav",
 	"incorrectAnswerSoundPath": "sounds/incorrect.wav",
 	"questions": [

@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.geometry.Insets?>
-
 <?import java.net.*?>
 
-<BorderPane fx:controller="net.ahven.ahvenpeli.GameScreenController" xmlns:fx="http://javafx.com/fxml">
+<BorderPane fx:controller="net.ahven.ahvenpeli.StartScreenController" xmlns:fx="http://javafx.com/fxml">
 	<center>
-		<VBox fx:id="gameField" alignment="CENTER" spacing="10" >
-			<VBox fx:id="questionField" alignment="CENTER" spacing="10" />
-			<Label fx:id="scoreLabel"/>
-			<StackPane fx:id="timerPane">
-				<Label fx:id="timeLabel"/>
+		<VBox alignment="CENTER" maxWidth="1024" spacing="20">
+		    <Label fx:id="instructionLabel" />
+		    <StackPane>
+				<TextField fx:id="nameField"/>
+				<Text fx:id="nameFieldPlaceholder"/>
 			</StackPane>
+			<Pane fx:id="keyboardPane"/>
+			<Button fx:id="startButton"/>
 		</VBox>
 	</center>
-	
 	<bottom>
 		<FlowPane alignment="BOTTOM_LEFT" hgap="10">
 			<padding>
@@ -25,7 +25,6 @@
 			<Button fx:id="stopButton"/>
 		</FlowPane>
 	</bottom>
-	
 	<stylesheets>
     	<URL value="@style.css" />
  	</stylesheets>

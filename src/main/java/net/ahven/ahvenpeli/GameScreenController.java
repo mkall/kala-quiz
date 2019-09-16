@@ -43,6 +43,9 @@ public class GameScreenController {
 	@FXML
 	private Label timeLabel;
 
+	@FXML
+	private Button stopButton;
+
 	private Rectangle timerBar;
 
 	public GameScreenController(Game game) {
@@ -64,6 +67,9 @@ public class GameScreenController {
 		timerBar.setHeight(26.0);
 		timerBar.setFill(Color.SLATEGRAY);
 		timerPane.getChildren().add(1, timerBar);
+
+		stopButton.setGraphic(new ImageView(Util.loadImageFromPath(game.getQuiz().getStopImagePath())));
+		stopButton.setOnAction((e) -> game.abortGame());
 
 		game.timerProperty().addListener((a, o, n) -> updateTime());
 		game.currentQuestionProperty().addListener((a, o, n) -> updateQuestion(n));
@@ -98,8 +104,8 @@ public class GameScreenController {
 		}
 		
 		GridPane optionsPane = new GridPane();
-		optionsPane.setVgap(5);
-		optionsPane.setHgap(5);
+		optionsPane.setVgap(20);
+		optionsPane.setHgap(20);
 		optionsPane.setAlignment(Pos.CENTER);
 		int col = 0;
 		int row = 0;

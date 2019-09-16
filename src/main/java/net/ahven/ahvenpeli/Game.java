@@ -31,6 +31,7 @@ public class Game {
 	private final Quiz quiz;
 	private final String locale;
 	private final String playerName;
+	private final Consumer<Game> abortGameOp;
 	private final Consumer<Game> gameCompletedOp;
 
 	private final List<Question> questions;
@@ -45,11 +46,14 @@ public class Game {
 	private ScheduledFuture<?> timerFuture;
 	private Optional<Clip> correctClip = Optional.empty();
 	private Optional<Clip> incorrectClip = Optional.empty();
+	private boolean isAborted = false;
 
-	public Game(Quiz quiz, String locale, String playerName, Consumer<Game> gameCompletedOp) {
+	public Game(Quiz quiz, String locale, String playerName, Consumer<Game> abortGameOp,
+			Consumer<Game> gameCompletedOp) {
 		this.quiz = quiz;
 		this.locale = locale;
 		this.playerName = playerName;
+		this.abortGameOp = abortGameOp;
 		this.gameCompletedOp = gameCompletedOp;
 
 		questions = initRandomQuestions();
@@ -102,6 +106,12 @@ public class Game {
 		return playerName;
 	}
 
+	public void abortGame() {
+		isAborted = true;
+		abortGameOp.accept(this);
+		stopTimer();
+	}
+
 	/**
 	 * Call from JFX thread.
 	 */
@@ -149,7 +159,9 @@ public class Game {
 		currQuestion.get().revealAnswer();
 		EXECUTOR.schedule(() -> {
 			Util.runInJfxThread(() -> {
-				nextQuestion();
+				if (!isAborted) {
+					nextQuestion();
+				}
 			});
 		}, quiz.getRevealAnswerTime(), TimeUnit.SECONDS);
 	}
